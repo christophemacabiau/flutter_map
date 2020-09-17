@@ -224,6 +224,14 @@ abstract class MapGestureMixin extends State<FlutterMap>
   }
 
   void handleScaleUpdate(ScaleUpdateDetails details) {
+    if (mapState.options.positionListener != null) {
+      var p = details.localFocalPoint;
+      var pixelOrigin = mapState.getPixelOrigin();
+      var pixel = CustomPoint(pixelOrigin.x + p.dx, pixelOrigin.y + p.dy);
+      var coordinates = mapState.unproject(pixel);
+      mapState.options.positionListener(coordinates);
+    }
+
     if (_tapUpCounter == 1) {
       _handleDoubleTapHold(details);
       return;

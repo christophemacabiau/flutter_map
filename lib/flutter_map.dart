@@ -140,6 +140,7 @@ abstract class MapController {
 typedef TapCallback = void Function(LatLng point);
 typedef LongPressCallback = void Function(LatLng point);
 typedef PositionCallback = void Function(MapPosition position, bool hasGesture);
+typedef PositionListener = void Function(LatLng position);
 
 /// Allows you to provide your map's starting properties for [zoom], [rotation]
 /// and [center]. Alternatively you can provide [bounds] instead of [center].
@@ -147,8 +148,8 @@ typedef PositionCallback = void Function(MapPosition position, bool hasGesture);
 /// over [center].
 /// Zoom, pan boundary and interactivity constraints can be specified here too.
 ///
-/// Callbacks for [onTap], [onLongPress] and [onPositionChanged] can be
-/// registered here.
+/// Callbacks for [onTap], [onLongPress], [onPositionChanged] and
+/// [positionListener] can be registered here.
 ///
 /// Through [crs] the Coordinate Reference System can be
 /// defined, it defaults to [Epsg3857].
@@ -213,6 +214,7 @@ class MapOptions {
   final TapCallback onTap;
   final LongPressCallback onLongPress;
   final PositionCallback onPositionChanged;
+  final PositionListener positionListener;
   final List<MapPlugin> plugins;
   final bool slideOnBoundaries;
   final Size screenSize;
@@ -254,6 +256,7 @@ class MapOptions {
     this.onTap,
     this.onLongPress,
     this.onPositionChanged,
+    this.positionListener,
     this.plugins = const [],
     this.slideOnBoundaries = false,
     this.adaptiveBoundaries = false,
