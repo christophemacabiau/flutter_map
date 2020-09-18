@@ -28,9 +28,9 @@ abstract class MapGestureMixin extends State<FlutterMap>
 
   // Pinch events debouncing
   // Sometimes, after a pinch sequence, we get another fake sequence handleScaleStart-handleScaleUpdate-handleScaleEnd
-  // with only one handleScaleUpdate call
+  // with few handleScaleUpdate calls
   // I have not found a way to detect this sequence to prevent it to generate fake position listener event
-  var _scaleStarting = false;
+  var _scaleStarting = 5;
 
   // Helps to reset ScaleUpdateDetails.scale back to 1.0 when a multi finger gesture wins
   double _scaleCorrector;
@@ -205,7 +205,7 @@ abstract class MapGestureMixin extends State<FlutterMap>
   }
 
   void handleScaleStart(ScaleStartDetails details) {
-    _scaleStarting = true;
+    _scaleStarting = 5;
 
     _dragMode = _pointerCounter == 1;
 
@@ -425,7 +425,7 @@ abstract class MapGestureMixin extends State<FlutterMap>
       }
     }
 
-    if (mapState.options.positionListener != null && !_scaleStarting) {
+    if (mapState.options.positionListener != null && _scaleStarting == 0) {
       final p = details.localFocalPoint;
       final pixelOrigin = mapState.getPixelOrigin();
       final pixel = CustomPoint(pixelOrigin.x + p.dx, pixelOrigin.y + p.dy);
@@ -437,7 +437,7 @@ abstract class MapGestureMixin extends State<FlutterMap>
           _flingAnimationStarted;
       mapState.options.positionListener(coordinates, mapAction);
     }
-    _scaleStarting = false;
+    if (_scaleStarting > 0) _scaleStarting--;
 
     _lastRotation = currentRotation;
     _lastScale = details.scale;
