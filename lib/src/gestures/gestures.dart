@@ -224,14 +224,6 @@ abstract class MapGestureMixin extends State<FlutterMap>
   }
 
   void handleScaleUpdate(ScaleUpdateDetails details) {
-    if (mapState.options.positionListener != null) {
-      var p = details.localFocalPoint;
-      var pixelOrigin = mapState.getPixelOrigin();
-      var pixel = CustomPoint(pixelOrigin.x + p.dx, pixelOrigin.y + p.dy);
-      var coordinates = mapState.unproject(pixel);
-      mapState.options.positionListener(coordinates);
-    }
-
     if (_tapUpCounter == 1) {
       _handleDoubleTapHold(details);
       return;
@@ -423,6 +415,19 @@ abstract class MapGestureMixin extends State<FlutterMap>
           }
         }
       }
+    }
+
+    if (mapState.options.positionListener != null) {
+      final p = details.localFocalPoint;
+      final pixelOrigin = mapState.getPixelOrigin();
+      final pixel = CustomPoint(pixelOrigin.x + p.dx, pixelOrigin.y + p.dy);
+      final coordinates = mapState.unproject(pixel);
+      final mapAction = _rotationStarted ||
+          _pinchZoomStarted ||
+          _pinchMoveStarted ||
+          _dragStarted ||
+          _flingAnimationStarted;
+      mapState.options.positionListener(coordinates, mapAction);
     }
 
     _lastRotation = currentRotation;

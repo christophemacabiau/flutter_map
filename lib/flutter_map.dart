@@ -140,7 +140,7 @@ abstract class MapController {
 typedef TapCallback = void Function(LatLng point);
 typedef LongPressCallback = void Function(LatLng point);
 typedef PositionCallback = void Function(MapPosition position, bool hasGesture);
-typedef PositionListener = void Function(LatLng position);
+typedef PositionListener = void Function(LatLng position, bool mapAction);
 
 /// Allows you to provide your map's starting properties for [zoom], [rotation]
 /// and [center]. Alternatively you can provide [bounds] instead of [center].
